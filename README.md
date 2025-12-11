@@ -151,6 +151,43 @@ The system uses multiple evaluators:
 5. **products**: Binary score for product list match (1.0 if exact match, 0.0 otherwise)
 6. **avg_score**: Average across all field-level evaluators excluding exact_match field.
 
+
+## Experiment Results
+
+The following results are based on 5 runs per model to ensure consistency:
+
+| Model | Avg Score | Exact Match | Buyer Info | Order Info | Address Info | Products | Latency/Sample |
+|-------|-----------|-------------|------------|------------|--------------|----------|----------------|
+| **GPT-4o** | 0.850 | 0.40 | 0.90 | 1.00 | 0.50 | 1.00 | 10 sec |
+| **GPT-5-mini** | 0.965 | 0.80 | 0.99 | 1.00 | 1.00 | 0.87 | 15 sec |
+| **GPT-5** | 0.967 | 0.80 | 0.96 | 1.00 | 1.00 | 0.90 | 90 sec |
+
+### Key Insights
+
+- **GPT-5-mini**: Best balance of performance and speed
+  - Highest average score (0.965)
+  - Perfect address extraction (1.00)
+  - 6x faster than GPT-5
+  - Recommended for production use
+
+- **GPT-5**: Highest accuracy but slowest
+  - Marginal improvement over GPT-5-mini (+0.002)
+  - 6x slower latency makes it impractical for high-volume processing
+  - Consider for critical/high-value orders only
+
+- **GPT-4o**: Baseline performance
+  - Fastest processing time
+  - Struggles with address extraction (0.50)
+  - Lower exact match rate (0.40)
+  - Not recommended for production
+
+### Performance Bottlenecks
+
+All models achieve perfect order info extraction (1.00), indicating the DIN 5008 header parsing is highly reliable. The main differentiators are:
+- **Address extraction**: GPT-5-mini and GPT-5 significantly outperform GPT-4o
+- **Product parsing**: GPT-4o excels here (1.00) while newer models occasionally struggle with supplier code identification
+
+
 ## Architecture
 
 ### Core Components
