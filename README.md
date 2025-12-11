@@ -1,4 +1,4 @@
-# Email Order Extraction
+# Automated Order Processing
 
 AI-powered extraction of order information from emails and PDF attachments using Azure OpenAI and Langfuse for evaluation and monitoring.
 
